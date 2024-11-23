@@ -2,45 +2,62 @@ const userModel = require("../models/user");
 const accountModel = require("../models/account");
 exports.register = async (req, res) => {
   const { username, firstName, lastName, password, email } = req.body;
-
-  let user = await userModel.findOne({ email });
-  const initialBal = Math.floor(Math.random() * 100000);
-  if (user) {
-    return res.json({
-      success: false,
-      message: "Email is invalid or already taken",
+  try {
+    if (!username || !firstName || !lastName || password || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Please Fill up All Fields",
+      });
+    }
+    let user = await userModel.findOne({ email });
+    const initialBal = Math.floor(Math.random() * 100000);
+    if (user) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is invalid or already taken",
+      });
+    }
+    user = await userModel.create({
+      username,
+      firstName,
+      lastName,
+      password,
+      email,
     });
-  }
-  user = await userModel.create({
-    username,
-    firstName,
-    lastName,
-    password,
-    email,
-  });
 
-  const accountData = await accountModel.create({
-    userId: user._id,
-    balance: initialBal,
-  });
-  const token = user.getSignedjwtToken();
-  res
-    .status(200)
-    .json({
+    const accountData = await accountModel.create({
+      userId: user._id,
+      balance: initialBal,
+    });
+    const token = user.getSignedjwtToken();
+    res.status(200).json({
       success: true,
       message: "User created successfully",
       token,
       balance: accountData.balance,
     });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 exports.signin = async (req, res) => {
   const { username, password } = req.body;
 
+  if (!username || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Please enter your user name and password",
+    });
+  }
+
   let user = await userModel.findOne({ username });
 
   if (!user) {
-    return res.json({
+    return res.status(401).json({
       success: false,
       message: "Invalid credentials",
     });
@@ -49,7 +66,7 @@ exports.signin = async (req, res) => {
   const isMatch = await user.matchPassword(password);
 
   if (!isMatch) {
-    return res.json({
+    return res.status(401).json({
       success: false,
       message: "Invalid credentials",
     });
@@ -85,5 +102,5 @@ exports.getUsers = async (req, res) => {
     $or: [{ firstName: { $regex: filter } }, { lastName: { $regex: filter } }],
   });
 
-  res.json({ success: true, data: users });
+  res.status(200).json({ success: true, data: users });
 };
