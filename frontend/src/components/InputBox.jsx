@@ -1,4 +1,4 @@
-export const InputBox = ({ label, placeholder,type ,onChange}) => {
+export const InputBox = ({ label, placeholder, type, onChange }) => {
   return (
     <div>
       <div className="text-sm font-medium text-left py-2">{label}</div>
