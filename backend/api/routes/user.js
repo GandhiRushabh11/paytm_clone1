@@ -4,13 +4,12 @@ const {
   signin,
   updateUser,
   getUsers,
+  getMe,
 } = require("../controllers/userController");
 const protect = require("../middleware/auth");
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Checking User");
-});
+router.get("/", protect, getMe);
 router.get("/bulk", getUsers);
 router.post("/register", register);
 router.post("/login", signin);

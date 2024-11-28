@@ -104,3 +104,10 @@ exports.getUsers = async (req, res) => {
 
   res.status(200).json({ success: true, data: users });
 };
+
+exports.getMe = async (req, res) => {
+
+  //const user = await userModel.findById(req.user._id);
+
+  res.status(200).json({ success: true, data: req.user });
+};
