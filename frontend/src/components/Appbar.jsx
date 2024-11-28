@@ -1,9 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./Button";
 import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Appbar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState("");
+  const userToken = localStorage.getItem("token");
+  const getLoggedUser = async () => {
+    const response = await axios.get("http://localhost:5000/api/v1/user/", {
+      headers: { Authorization: `Bearer ${userToken}` },
+    });
+    setUser(response.data.data);
+  };
+  useEffect(() => {
+    getLoggedUser();
+  }, []);
 
   function signOutHandler() {
     localStorage.removeItem("token");
@@ -17,7 +30,7 @@ const Appbar = () => {
       </Link>
       <div className="flex items-center gap-2">
         {<Button label={"Sign Out"} onClick={signOutHandler}></Button>}
-        <div className="flex flex-col h-full mr-4">{"Rushabh Gandhi"}</div>
+        <div className="flex flex-col h-full mr-4">{user.firstName}</div>
         <div className="rounded-full h-10 w-10 p-4 bg-slate-200 flex justify-center mr-2">
           <div className="flex flex-col justify-center h-full text-xl">
             {"R"}
