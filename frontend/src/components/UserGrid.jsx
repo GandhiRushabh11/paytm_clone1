@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router";
 import { Button } from "./Button";
 
 export const UserGrid = ({ user }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between">
       <div className="flex">
@@ -16,7 +18,12 @@ export const UserGrid = ({ user }) => {
         </div>
       </div>
       <div className="flex flex-col justify-center h-full">
-        <Button label={"Send Money"} />
+        <Button
+          label={"Send Money"}
+          onClick={() => {
+            navigate("/send?id=" + `${user._id}` + "&name=" + `${user.firstName}`);
+          }}
+        />
       </div>
     </div>
   );
