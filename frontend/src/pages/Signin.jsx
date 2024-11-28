@@ -53,12 +53,10 @@ function Signin() {
                     "http://localhost:5000/api/v1/user/login",
                     { username, password }
                   );
-                  console.log(data);
                   localStorage.setItem("token", data.data.token);
                   toast.success("Login successful!");
                   navigate("/dashboard");
                 } catch (error) {
-                  console.log(error);
                   toast.error(error.response?.data?.message || "Login failed.");
                 }
                 finally {

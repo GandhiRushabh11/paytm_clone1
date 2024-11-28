@@ -84,12 +84,10 @@ function Signup() {
                       password,
                     }
                   );
-                  console.log(response);
                   localStorage.setItem("token", response.data.token);
                   toast.success("User created successfully");
                   navigate("/dashboard");
                 } catch (error) {
-                  console.log(error);
                   toast.error(
                     error.response?.data?.message ||
                       "An error occurred during Signup."
