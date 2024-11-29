@@ -1,11 +1,16 @@
+import axios from "axios";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const name = searchParams.get("name");
   const id = searchParams.get("id");
-
+  const [amount, setAmount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const userToken = localStorage.getItem("token");
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center h-screen items-center bg-gray-200">
       <div className="h-full flex flex-col justify-center">
@@ -30,13 +35,46 @@ const SendMoney = () => {
                   id="amount"
                   placeholder="Enter Amount"
                   className="flex h-10 w-full rounded-md border px-3 py-2 text-sm"
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                  }}
                 />
               </div>
-              <button className="justify-center rounded-md text-sm font-medium h-10 w-full py-2 px-4 bg-green-500 text-white">
-                Initiate Transfer
+              <button
+                className="justify-center rounded-md text-sm font-medium h-10 w-full py-2 px-4 bg-green-500 text-white"
+                onClick={async () => {
+                  setIsLoading(true);
+                  try {
+                    const response = await axios.post(
+                      "http://localhost:5000/api/v1/account/transfer",
+                      { to: id, amount },
+                      {
+                        headers: { Authorization: `Bearer ${userToken}` },
+                      }
+                    );
+                    setTimeout(() => {
+                      toast.success(response.data.message);
+                      setIsLoading(false);
+                      navigate("/dashboard");
+                    }, 2000);
+                  } catch (error) {
+                    setTimeout(() => {
+                      setIsLoading(false);
+                      toast.error(error.response.data.message);
+                      navigate("/dashboard");
+                    }, 1000);
+                  }
+                }}
+              >
+                {!isLoading ? "Initiate Transfer" : "Transferring Amount ..."}
               </button>
-              <button className="justify-center rounded-md text-sm font-medium h-10 w-full py-2 px-4 bg-red-500 text-white">
-                Cancel  & Go Back
+              <button
+                onClick={() => {
+                  navigate("/dashboard");
+                }}
+                className="justify-center rounded-md text-sm font-medium h-10 w-full py-2 px-4 bg-red-500 text-white"
+              >
+                Cancel & Go Back
               </button>
             </div>
           </div>
