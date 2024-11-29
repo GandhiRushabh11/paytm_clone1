@@ -16,10 +16,18 @@ exports.transfer = async (req, res) => {
   session.startTransaction();
   const { amount, to } = req.body;
 
+  //Self Transfer Condition
+  if (to == req.user._id) {
+    await session.abortTransaction();
+    return res.status(400).json({
+      message: "You cannot transfer to yourself !!!",
+    });
+  }
+
   // Fetch the accounts within the transaction
   const account = await accountModel.findOne({ userId: req.user._id });
 
-  if (!account && account.balance < amount) {
+  if (!account || account.balance < amount) {
     await session.abortTransaction();
     return res.status(400).json({
       message: "Insufficient balance",

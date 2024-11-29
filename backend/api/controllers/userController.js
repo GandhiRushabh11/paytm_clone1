@@ -97,7 +97,6 @@ exports.updateUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   const filter = req.query.filter || "";
-  console.log(filter);
   const users = await userModel.find({
     $or: [
       { firstName: { $regex: filter, $options: "i" } },
