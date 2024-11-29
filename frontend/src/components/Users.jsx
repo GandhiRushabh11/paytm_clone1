@@ -4,13 +4,15 @@ import { UserGrid } from "./UserGrid";
 
 export const Users = () => {
   const [users, setUsers] = useState([]);
-  //Need to apply debouncing here 
+  //Need to apply debouncing here
   const [filter, setFilter] = useState("");
   useEffect(() => {
     const userToken = localStorage.getItem("token");
     async function getAllUsers() {
       const response = await axios.get(
-        "http://localhost:5000/api/v1/user/bulk"+`?filter=${filter}`,
+        import.meta.env.VITE_SERVER_URL +
+          "/api/v1/user/bulk" +
+          `?filter=${filter}`,
         {
           headers: { Authorization: `Bearer ${userToken}` },
         }

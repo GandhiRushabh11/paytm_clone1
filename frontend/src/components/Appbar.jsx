@@ -9,9 +9,12 @@ const Appbar = () => {
   const [user, setUser] = useState("");
   const userToken = localStorage.getItem("token");
   const getLoggedUser = async () => {
-    const response = await axios.get("http://localhost:5000/api/v1/user/", {
-      headers: { Authorization: `Bearer ${userToken}` },
-    });
+    const response = await axios.get(
+      import.meta.env.VITE_SERVER_URL + "/api/v1/user/",
+      {
+        headers: { Authorization: `Bearer ${userToken}` },
+      }
+    );
     setUser(response.data.data);
   };
   useEffect(() => {

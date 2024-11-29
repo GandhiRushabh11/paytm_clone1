@@ -75,7 +75,7 @@ function Signup() {
                 setIsLoading(true);
                 try {
                   const response = await axios.post(
-                    "http://localhost:5000/api/v1/user/register",
+                    import.meta.env.VITE_SERVER_URL + "/api/v1/user/register",
                     {
                       firstName,
                       lastName,
@@ -92,8 +92,7 @@ function Signup() {
                     error.response?.data?.message ||
                       "An error occurred during Signup."
                   );
-                }
-                finally {
+                } finally {
                   setIsLoading(false);
                 }
               }}

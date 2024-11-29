@@ -50,7 +50,7 @@ function Signin() {
                 setIsLoading(true);
                 try {
                   const data = await axios.post(
-                    "http://localhost:5000/api/v1/user/login",
+                    import.meta.env.VITE_SERVER_URL + "/api/v1/user/login",
                     { username, password }
                   );
                   localStorage.setItem("token", data.data.token);
@@ -58,8 +58,7 @@ function Signin() {
                   navigate("/dashboard");
                 } catch (error) {
                   toast.error(error.response?.data?.message || "Login failed.");
-                }
-                finally {
+                } finally {
                   setIsLoading(false);
                 }
               }}

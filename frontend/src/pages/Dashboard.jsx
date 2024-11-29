@@ -17,15 +17,15 @@ const Dashboard = () => {
     } else {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/v1/account/balance",
+          import.meta.env.VITE_SERVER_URL + "/api/v1/account/balance",
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
 
         //Setting Up Balance For user
         setBalance(response.data?.balance);
       } catch (error) {
-        toast.error("Session expired, please login again.")
-        localStorage.removeItem("token")
+        toast.error("Session expired, please login again.");
+        localStorage.removeItem("token");
         navigate("/signin");
       }
     }
