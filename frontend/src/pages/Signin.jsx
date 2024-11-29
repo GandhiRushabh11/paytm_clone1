@@ -28,9 +28,9 @@ function Signin() {
           <Heading label={"Sign In"} />
           <SubHeading label={"Enter your credentials to access your account"} />
           <InputBox
-            label={"Email"}
-            placeholder={"Email ID"}
-            type={"email"}
+            label={"Username"}
+            placeholder={"Username"}
+            type={"text"}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
